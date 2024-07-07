@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			const taskContainer = document.createElement("div");
 			taskContainer.classList.add("task");
 
-			const randomHours = (Math.floor(Math.random() * 4) + 1) * 0.5; // Random hours between 0.5 and 2 hours
+			const randomHours = (Math.floor(Math.random() * 12) + 1) * 0.5; // Random hours between 0.5 and 2 hours
 			const randomPriority = Math.floor(Math.random() * 5) + 1; // Random priority between 1 and 5
 			const randomEnergy = Math.floor(Math.random() * 5) + 1; // Random energy between 1 and 5
 
