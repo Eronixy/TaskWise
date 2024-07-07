@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskWise</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <h1>TaskWise</h1>
+    <button id="add-tasks-button">Add Tasks</button>
+    <button id="customize-button">Customize Hours</button>
+    <button id="dev-mode-button">Dev Mode</button>
+    <div id="customize-popup" class="popup">
+      <div class="popup-content">
+        <span class="close-button">&times;</span>
+        <h2>Customize Hours</h2>
+        <form id="customize-form">
+          <label for="start-hour">Start Hour:</label>
+          <input type="number" id="start-hour" name="start-hour" min="0" max="23" value="8">
+          <label for="end-hour">End Hour:</label>
+          <input type="number" id="end-hour" name="end-hour" min="1" max="24" value="22">
+          <button type="submit">Apply</button>
+        </form>
+      </div>
+    </div>
+    <div id="add-tasks-popup" class="popup">
+      <div class="popup-content">
+        <span class="close-button">&times;</span>
+        <h2>Add Tasks</h2>
+        <form id="tasks-form">
+          <div id="tasks-container">
+            <div class="task">
+              <label for="task-name">Task Name:</label>
+              <input type="text" name="task-name" required>
+              <label for="priority-level">Priority Level:</label>
+              <input type="number" name="priority-level" min="1" required>
+              <label for="energy-value">Energy Value:</label>
+              <input type="number" name="energy-value" min="1" required>
+              <label for="task-time">Time (hours):</label>
+              <input type="number" name="task-time" min="0.5" step="0.5" required>
+            </div>
+          </div>
+          <button type="button" id="add-task">Add Another Task</button>
+          <div>
+            <label for="optimization-criterion">Optimize by:</label>
+            <select id="optimization-criterion" name="optimization-criterion" required>
+              <option value="priority">Priority Level</option>
+              <option value="energy">Energy Value</option>
+            </select>
+          </div>
+          <button type="submit">Generate Schedule</button>
+        </form>
+      </div>
+    </div>
+    <div id="success-popup" class="popup">
+      <div class="popup-content">
+        <span class="close-button">&times;</span>
+        <h2>Schedule Generated</h2>
+        <p id="execution-time"></p>
+        <h3>Unscheduled Tasks:</h3>
+        <ul id="unscheduled-tasks-list"></ul>
+      </div>
+    </div>
+    <div id="dev-mode-popup" class="popup">
+      <div class="popup-content">
+        <span class="close-button">&times;</span>
+        <h2>Dev Mode</h2>
+        <form id="dev-mode-form">
+          <label for="num-tasks">Number of Tasks:</label>
+          <input type="number" id="num-tasks" name="num-tasks" min="1" required>
+          <button type="submit">Generate Tasks</button>
+        </form>
+      </div>
+    </div>
+    <div id="total-time">Total Free Time: 0 hours</div>
+    <div class="grid-container">
+      <div class="grid-header"></div>
+      <div class="grid-header">Monday</div>
+      <div class="grid-header">Tuesday</div>
+      <div class="grid-header">Wednesday</div>
+      <div class="grid-header">Thursday</div>
+      <div class="grid-header">Friday</div>
+      <div class="grid-header">Saturday</div>
+      <div class="grid-header">Sunday</div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
