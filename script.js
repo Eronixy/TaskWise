@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 	const devModeButton = document.getElementById("dev-mode-button");
 	const devModePopup = document.getElementById("dev-mode-popup");
 	const devModeForm = document.getElementById("dev-mode-form");
+	const resetButton = document.getElementById("reset-button");
 
 	let totalFreeTime = 0;
 	let isMouseDown = false;
@@ -62,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		event.preventDefault();
 		startHour = parseInt(document.getElementById("start-hour").value);
 		endHour = parseInt(document.getElementById("end-hour").value);
-		resetGrid();
+		clearGrid();
 		generateGrid();
 		customizePopup.style.display = "none";
 	});
@@ -107,8 +108,10 @@ document.addEventListener("DOMContentLoaded", function() {
             <input type="number" name="energy-value" min="1" max="5" required>
             <label for="task-time">Time (hours):</label>
             <input type="number" name="task-time" step="0.5" min="0.5" required>
+            <button type="button" class="delete-button">Delete Task</button>
         `;
 		tasksContainer.appendChild(taskDiv);
+		addDeleteTaskListener(taskDiv.querySelector(".delete-button"));
 	});
 
 	devModeForm.addEventListener("submit", (event) => {
@@ -122,9 +125,9 @@ document.addEventListener("DOMContentLoaded", function() {
 			const taskContainer = document.createElement("div");
 			taskContainer.classList.add("task");
 
-			const randomHours = (Math.floor(Math.random() * 12) + 1) * 0.5; // Random hours between 0.5 and 2 hours
-			const randomPriority = Math.floor(Math.random() * 5) + 1; // Random priority between 1 and 5
-			const randomEnergy = Math.floor(Math.random() * 5) + 1; // Random energy between 1 and 5
+			const randomHours = (Math.floor(Math.random() * 12) + 1) * 0.5;
+			const randomPriority = Math.floor(Math.random() * 5) + 1;
+			const randomEnergy = Math.floor(Math.random() * 5) + 1;
 
 			taskContainer.innerHTML = `
                 <label for="task-name">Task Name:</label>
@@ -135,38 +138,61 @@ document.addEventListener("DOMContentLoaded", function() {
                 <input type="number" name="energy-value" min="1" value="${randomEnergy}" required>
                 <label for="task-time">Time (hours):</label>
                 <input type="number" name="task-time" step="0.5" min="0.5" value="${randomHours}" required>
+                <button type="button" class="delete-button">Delete Task</button>
             `;
 
 			tasksContainer.appendChild(taskContainer);
+			addDeleteTaskListener(taskContainer.querySelector(".delete-button"));
 		}
 
 		devModePopup.style.display = "none";
 	});
 
-
-
-	function resetGrid() {
-		totalFreeTime = 0;
-		gridContainer.innerHTML = `
-            <div class="grid-header"></div>
-            <div class="grid-header">Monday</div>
-            <div class="grid-header">Tuesday</div>
-            <div class="grid-header">Wednesday</div>
-            <div class="grid-header">Thursday</div>
-            <div class="grid-header">Friday</div>
-            <div class="grid-header">Saturday</div>
-            <div class="grid-header">Sunday</div>
-        `;
+	function addDeleteTaskListener(deleteButton) {
+		deleteButton.addEventListener("click", () => {
+			deleteButton.parentElement.remove();
+		});
 	}
 
+	resetButton.addEventListener("click", () => {
+		totalFreeTime = 0;
+		updateTotalTime();
+		clearGrid();
+		generateGrid();
+	});
+
+
 	function generateGrid() {
+		const gridRows = (((endHour - startHour) + 1) * intervalsInHour);
+		const gridColumns = daysOfWeek.length + 1;
+
+		gridContainer.style.gridTemplateRows = `repeat(${gridRows}, auto)`;
+		gridContainer.style.gridTemplateColumns = `auto repeat(${daysOfWeek.length}, 1fr)`;
+
+		const cornerHeader = document.createElement("div");
+		cornerHeader.classList.add("grid-header");
+		cornerHeader.style.gridRow = 'span 2';
+		cornerHeader.style.gridColumn = '1';
+		gridContainer.appendChild(cornerHeader);
+
+		daysOfWeek.forEach((day, index) => {
+			const dayHeader = document.createElement("div");
+			dayHeader.classList.add("grid-header");
+			dayHeader.textContent = day;
+			dayHeader.style.gridRow = '1 / span 2';
+			dayHeader.style.gridColumn = (index + 2).toString();
+			gridContainer.appendChild(dayHeader);
+		});
+
 		for (let hour = startHour; hour < endHour; hour++) {
 			const labelCell = document.createElement("div");
 			labelCell.classList.add("grid-label");
 			labelCell.textContent = `${hour}:00 - ${hour + 1}:00`;
 			labelCell.style.gridRow = `span ${intervalsInHour}`;
 			gridContainer.appendChild(labelCell);
+		}
 
+		for (let hour = startHour; hour < endHour; hour++) {
 			daysOfWeek.forEach(day => {
 				for (let interval = 0; interval < intervalsInHour; interval++) {
 					const cell = document.createElement("div");
@@ -180,6 +206,12 @@ document.addEventListener("DOMContentLoaded", function() {
 					gridContainer.appendChild(cell);
 				}
 			});
+		}
+	}
+
+	function clearGrid() {
+		while (gridContainer.firstChild) {
+			gridContainer.removeChild(gridContainer.firstChild);
 		}
 	}
 
@@ -270,8 +302,8 @@ document.addEventListener("DOMContentLoaded", function() {
 			let taskColor = getRandomColor();
 			for (let i = 0; i < freeCells.length && timeRemaining > 0; i++) {
 				const cell = freeCells[i];
-				if (!cell.classList.contains("task")) {
-					cell.classList.add("task");
+				if (!cell.classList.contains("scheduled-task")) {
+					cell.classList.add("scheduled-task");
 					cell.style.backgroundColor = taskColor;
 					cell.textContent = task.name;
 					timeRemaining--;
@@ -291,10 +323,10 @@ document.addEventListener("DOMContentLoaded", function() {
 	}
 
 	function getRandomColor() {
-		const letters = '0123456789ABCDEF';
+		const letters = '89ABCDEF';
 		let color = '#';
 		for (let i = 0; i < 6; i++) {
-			color += letters[Math.floor(Math.random() * 16)];
+			color += letters[Math.floor(Math.random() * letters.length)];
 		}
 		return color;
 	}
