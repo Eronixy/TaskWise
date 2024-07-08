@@ -12,6 +12,7 @@
     <button id="add-tasks-button">Add Tasks</button>
     <button id="customize-button">Customize Hours</button>
     <button id="dev-mode-button">Dev Mode</button>
+    <button id="reset-button">Reset Schedule</button>
     <div id="customize-popup" class="popup">
       <div class="popup-content">
         <span class="close-button">&times;</span>
@@ -42,6 +43,12 @@
               <input type="number" name="task-time" min="0.5" step="0.5" required>
             </div>
           </div>
+          <h3>Criteria:</h3>
+          <p>Very High - 5</p>
+          <p>High - 4</p>
+          <p>Medium - 3</p>
+          <p>Low - 2</p>
+          <p>Very Low - 1</p>
           <button type="button" id="add-task">Add Another Task</button>
           <div>
             <label for="optimization-criterion">Optimize by:</label>
@@ -75,16 +82,7 @@
       </div>
     </div>
     <div id="total-time">Total Free Time: 0 hours</div>
-    <div class="grid-container">
-      <div class="grid-header"></div>
-      <div class="grid-header">Monday</div>
-      <div class="grid-header">Tuesday</div>
-      <div class="grid-header">Wednesday</div>
-      <div class="grid-header">Thursday</div>
-      <div class="grid-header">Friday</div>
-      <div class="grid-header">Saturday</div>
-      <div class="grid-header">Sunday</div>
-    </div>
+    <div class="grid-container"></div>
     <script src="script.js"></script>
   </body>
 </html>
