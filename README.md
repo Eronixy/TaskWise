@@ -11,15 +11,16 @@ Group 2 Members:
 # TaskWise
 
 TaskWise is a web-based task scheduling application designed to help users optimize their weekly schedules. By allowing users to input tasks with various attributes such as priority and energy levels, TaskWise generates an optimal schedule that maximizes productivity based on user-defined criteria.
-Features
 
-Interactive weekly schedule grid
-Customizable working hours
-Task management system with priority and energy level inputs
-Optimal schedule generation using a knapsack algorithm
-Choice of optimization criteria
-Visual representation of scheduled tasks with color coding
-Developer mode for quick task generation and testing
+## Features
+
+- Interactive weekly schedule grid
+- Customizable working hours
+- Task management system with priority and energy level inputs
+- Optimal schedule generation using a knapsack algorithm
+- Choice of optimization criteria
+- Visual representation of scheduled tasks with color coding
+- Developer mode for quick task generation and testing
 
 ## Installation
 
@@ -83,7 +84,7 @@ The algorithm may become slow with a large number of tasks.
 
 Future versions could include:
 
-Backend integration for data persistence
-More advanced scheduling algorithms for improved performance
-Drag-and-drop interface for manual task arrangement
-Integration with calendar applications
+- Backend integration for data persistence
+- More advanced scheduling algorithms for improved performance
+- Drag-and-drop interface for manual task arrangement
+- Integration with calendar applications
