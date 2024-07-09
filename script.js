@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 <input type="number" name="task-time" step="0.5" min="0.5" value="${randomHours}" required>
                 <button type="button" class="delete-button">Delete Task</button>
             `;
-
+      
 			tasksContainer.appendChild(taskContainer);
 			addDeleteTaskListener(taskContainer.querySelector(".delete-button"));
 		}
@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function() {
 			deleteButton.parentElement.remove();
 		});
 	}
-
+	
 	resetButton.addEventListener("click", () => {
 		totalFreeTime = 0;
 		updateTotalTime();
@@ -162,59 +162,59 @@ document.addEventListener("DOMContentLoaded", function() {
 	});
 
 
-	function generateGrid() {
-		const gridRows = (((endHour - startHour) + 1) * intervalsInHour);
-		const gridColumns = daysOfWeek.length + 1;
+    function generateGrid() {
+        const gridRows = (((endHour - startHour) + 1) * intervalsInHour);
+        const gridColumns = daysOfWeek.length + 1;
 
-		gridContainer.style.gridTemplateRows = `repeat(${gridRows}, auto)`;
-		gridContainer.style.gridTemplateColumns = `auto repeat(${daysOfWeek.length}, 1fr)`;
+        gridContainer.style.gridTemplateRows = `repeat(${gridRows}, auto)`;
+        gridContainer.style.gridTemplateColumns = `auto repeat(${daysOfWeek.length}, 1fr)`;
+        
+        const cornerHeader = document.createElement("div");
+        cornerHeader.classList.add("grid-header");
+        cornerHeader.style.gridRow = 'span 2';
+        cornerHeader.style.gridColumn = '1';
+        gridContainer.appendChild(cornerHeader);
+    
+        daysOfWeek.forEach((day, index) => {
+            const dayHeader = document.createElement("div");
+            dayHeader.classList.add("grid-header");
+            dayHeader.textContent = day;
+            dayHeader.style.gridRow = '1 / span 2';
+            dayHeader.style.gridColumn = (index + 2).toString();
+            gridContainer.appendChild(dayHeader);
+        });
+        
+        for (let hour = startHour; hour < endHour; hour++) {
+            const labelCell = document.createElement("div");
+            labelCell.classList.add("grid-label");
+            labelCell.textContent = `${hour}:00 - ${hour + 1}:00`;
+            labelCell.style.gridRow = `span ${intervalsInHour}`;
+            gridContainer.appendChild(labelCell);
+        }
 
-		const cornerHeader = document.createElement("div");
-		cornerHeader.classList.add("grid-header");
-		cornerHeader.style.gridRow = 'span 2';
-		cornerHeader.style.gridColumn = '1';
-		gridContainer.appendChild(cornerHeader);
-
-		daysOfWeek.forEach((day, index) => {
-			const dayHeader = document.createElement("div");
-			dayHeader.classList.add("grid-header");
-			dayHeader.textContent = day;
-			dayHeader.style.gridRow = '1 / span 2';
-			dayHeader.style.gridColumn = (index + 2).toString();
-			gridContainer.appendChild(dayHeader);
-		});
-
-		for (let hour = startHour; hour < endHour; hour++) {
-			const labelCell = document.createElement("div");
-			labelCell.classList.add("grid-label");
-			labelCell.textContent = `${hour}:00 - ${hour + 1}:00`;
-			labelCell.style.gridRow = `span ${intervalsInHour}`;
-			gridContainer.appendChild(labelCell);
-		}
-
-		for (let hour = startHour; hour < endHour; hour++) {
-			daysOfWeek.forEach(day => {
-				for (let interval = 0; interval < intervalsInHour; interval++) {
-					const cell = document.createElement("div");
-					cell.classList.add("grid-item");
-					cell.dataset.day = day;
-					cell.dataset.hour = hour;
-					cell.dataset.interval = interval;
-					cell.addEventListener("mousedown", onMouseDown);
-					cell.addEventListener("mouseover", onMouseOver);
-					cell.addEventListener("mouseup", onMouseUp);
-					gridContainer.appendChild(cell);
-				}
-			});
-		}
+        for (let hour = startHour; hour < endHour; hour++) {
+            daysOfWeek.forEach(day => {
+                for (let interval = 0; interval < intervalsInHour; interval++) {
+                    const cell = document.createElement("div");
+                    cell.classList.add("grid-item");
+                    cell.dataset.day = day;
+                    cell.dataset.hour = hour;
+                    cell.dataset.interval = interval;
+                    cell.addEventListener("mousedown", onMouseDown);
+                    cell.addEventListener("mouseover", onMouseOver);
+                    cell.addEventListener("mouseup", onMouseUp);
+                    gridContainer.appendChild(cell);
+                }
+            });
+        }
+    }
+    
+  function clearGrid() {
+	while (gridContainer.firstChild) {
+		gridContainer.removeChild(gridContainer.firstChild);
 	}
-
-	function clearGrid() {
-		while (gridContainer.firstChild) {
-			gridContainer.removeChild(gridContainer.firstChild);
-		}
-	}
-
+}
+    
 	document.addEventListener("mouseup", () => {
 		isMouseDown = false;
 		toggleState = null;
@@ -276,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
 					totalWeight += tasks[j].time;
 					totalValue += getValue(tasks[j]);
 					combination.push(tasks[j]);
-				}
+				} 
 			}
 			if (totalWeight <= capacity && totalValue > bestValue) {
 				bestValue = totalValue;
@@ -291,26 +291,26 @@ document.addEventListener("DOMContentLoaded", function() {
 		};
 	}
 
-	function displaySchedule(schedule) {
-		const freeCells = Array.from(document.querySelectorAll(".grid-item.free"));
-		freeCells.forEach(cell => cell.classList.remove("task"));
-
-		schedule.sort((a, b) => b.priority - a.priority);
-
-		schedule.forEach(task => {
-			let timeRemaining = task.time;
-			let taskColor = getRandomColor();
-			for (let i = 0; i < freeCells.length && timeRemaining > 0; i++) {
-				const cell = freeCells[i];
-				if (!cell.classList.contains("scheduled-task")) {
-					cell.classList.add("scheduled-task");
-					cell.style.backgroundColor = taskColor;
-					cell.textContent = task.name;
-					timeRemaining--;
-				}
-			}
-		});
-	}
+  function displaySchedule(schedule, criterion) {
+  	const freeCells = Array.from(document.querySelectorAll(".grid-item.free"));
+  	freeCells.forEach(cell => cell.classList.remove("task"));
+  
+  	schedule.sort((a, b) => criterion === 'priority' ? b.priority - a.priority : b.energy - a.energy);
+  
+  	schedule.forEach(task => {
+  		let timeRemaining = task.time;
+  		let taskColor = getRandomColor();
+  		for (let i = 0; i < freeCells.length && timeRemaining > 0; i++) {
+  			const cell = freeCells[i];
+  			if (!cell.classList.contains("scheduled-task")) {
+  				cell.classList.add("scheduled-task");
+  				cell.style.backgroundColor = taskColor;
+  				cell.textContent = task.name;
+  				timeRemaining--;
+  			}
+  		}
+  	});
+  }
 
 	function displayUnscheduledTasks(unscheduledTasks) {
 		const unscheduledTasksList = document.getElementById("unscheduled-tasks-list");
@@ -322,14 +322,14 @@ document.addEventListener("DOMContentLoaded", function() {
 		});
 	}
 
-	function getRandomColor() {
-		const letters = '89ABCDEF';
-		let color = '#';
-		for (let i = 0; i < 6; i++) {
-			color += letters[Math.floor(Math.random() * letters.length)];
-		}
-		return color;
-	}
+  function getRandomColor() {
+    const letters = '89ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * letters.length)];
+    }
+    return color;
+}
 
 	generateGrid();
 });
