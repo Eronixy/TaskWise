@@ -125,7 +125,7 @@ button:hover {
 
 #total-time {
   margin-top: 20px;
-  font-size: 1.2em;
+  font-size: 16px;
   font-weight: bold;
 }
 
@@ -214,18 +214,11 @@ select:focus {
   grid-column: span 2;
 }
 
+
 form {
   margin: 5px;
 }
 
-#dev-mode-popup .popup-content {
-  background-color: #fefefe;
-  margin: 5% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  max-width: 400px;
-}
 
 #unscheduled-tasks-list {
   list-style: none;
