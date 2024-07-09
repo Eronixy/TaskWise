@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function() {
 		} = generateOptimalSchedule(tasks, freeTimeSlots, criterion);
 		const endTime = performance.now();
 		const executionTime = endTime - startTime;
-		displaySchedule(schedule);
+		displaySchedule(schedule, criterion);
 		displayUnscheduledTasks(unscheduledTasks);
 		executionTimeDisplay.textContent = `Execution Time: ${executionTime.toFixed(2)} milliseconds`;
 		successPopup.style.display = "block";
@@ -296,7 +296,7 @@ document.addEventListener("DOMContentLoaded", function() {
   	freeCells.forEach(cell => cell.classList.remove("task"));
   
   	schedule.sort((a, b) => criterion === 'priority' ? b.priority - a.priority : b.energy - a.energy);
-  
+
   	schedule.forEach(task => {
   		let timeRemaining = task.time;
   		let taskColor = getRandomColor();
